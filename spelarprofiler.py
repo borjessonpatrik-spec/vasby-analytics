@@ -757,7 +757,8 @@ def main():
     rita_lag(bred, bred_def, sammanfattning, matcher, utmapp, plan, lag_tot, h_tot, h_max, snitt, n_snitt, topp3)
     for _, rad in sammanfattning.iterrows():
         rita_spelare(bred, rad, matcher, utmapp, plan, h_tot, h_max, snitt, n_snitt)
-
+    skapa_portal(utmapp, sammanfattning)
+    skapa_spelarsidor(utmapp, sammanfattning)
     print(sammanfattning.to_string(index=False))
     if var:
         grupper = {}
@@ -802,3 +803,30 @@ def skapa_portal(utmapp, sammanfattning):
 
     with open(utmapp / "index.html", "w", encoding="utf-8") as f:
         f.write(html)
+def skapa_spelarsidor(utmapp, sammanfattning):
+    for _, rad in sammanfattning.iterrows():
+
+        nr = int(rad["spelare"])
+
+        html = f"""
+        <html>
+        <body>
+
+        <a href="index.html">
+        ← Tillbaka
+        </a>
+
+        <h1>Spelare #{nr}</h1>
+
+        <img src="spelare_{nr}.png" width="1400">
+
+        </body>
+        </html>
+        """
+
+        with open(
+            utmapp / f"spelare_{nr}.html",
+            "w",
+            encoding="utf-8"
+        ) as f:
+            f.write(html)
