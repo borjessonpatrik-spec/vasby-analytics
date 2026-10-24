@@ -772,3 +772,33 @@ def main():
 
 if __name__ == "__main__":
     main()
+def skapa_portal(utmapp, sammanfattning):
+    html = """
+    <html>
+    <head>
+        <title>Väsby Analytics</title>
+    </head>
+    <body>
+        <h1>Väsby Analytics</h1>
+
+        <h2>Lagöversikt</h2>
+        <img src="lag_oversikt.png" width="1000">
+
+        <h2>Spelare</h2>
+    """
+
+    for _, rad in sammanfattning.iterrows():
+        nr = int(rad["spelare"])
+
+        html += f"""
+        <p>
+            <a href="spelare_{nr}.html">
+                Spelare #{nr}
+            </a>
+        </p>
+        """
+
+    html += "</body></html>"
+
+    with open(utmapp / "index.html", "w", encoding="utf-8") as f:
+        f.write(html)
