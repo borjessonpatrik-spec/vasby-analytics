@@ -703,6 +703,65 @@ def rita_lag(bred, bred_def, sammanfattning, matcher, utmapp, plan, lag_tot, h_t
 
 def spara_csv(df, sokvag):
     df.to_csv(sokvag, index=False, sep=";", decimal=",", encoding="utf-8-sig")  # öppnas rätt i svensk Excel
+def skapa_portal(utmapp, sammanfattning):
+     print("SKAPAR PORTAL")
+    html = """
+    <html>
+    <head>
+        <title>Väsby Analytics</title>
+    </head>
+    <body>
+        <h1>Väsby Analytics</h1>
+
+        <h2>Lagöversikt</h2>
+        <img src="lag_oversikt.png" width="1000">
+
+        <h2>Spelare</h2>
+    """
+
+    for _, rad in sammanfattning.iterrows():
+        nr = int(rad["spelare"])
+
+        html += f"""
+        <p>
+            <a href="spelare_{nr}.html">
+                Spelare #{nr}
+            </a>
+        </p>
+        """
+
+    html += "</body></html>"
+
+    with open(utmapp / "index.html", "w", encoding="utf-8") as f:
+        f.write(html)
+def skapa_spelarsidor(utmapp, sammanfattning):
+    print("SKAPAR SPELARSIDOR")
+    for _, rad in sammanfattning.iterrows():
+
+        nr = int(rad["spelare"])
+
+        html = f"""
+        <html>
+        <body>
+
+        <a href="index.html">
+        ← Tillbaka
+        </a>
+
+        <h1>Spelare #{nr}</h1>
+
+        <img src="spelare_{nr}.png" width="1400">
+
+        </body>
+        </html>
+        """
+
+        with open(
+            utmapp / f"spelare_{nr}.html",
+            "w",
+            encoding="utf-8"
+        ) as f:
+            f.write(html)
 
 
 def main():
@@ -773,60 +832,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-def skapa_portal(utmapp, sammanfattning):
-    html = """
-    <html>
-    <head>
-        <title>Väsby Analytics</title>
-    </head>
-    <body>
-        <h1>Väsby Analytics</h1>
-
-        <h2>Lagöversikt</h2>
-        <img src="lag_oversikt.png" width="1000">
-
-        <h2>Spelare</h2>
-    """
-
-    for _, rad in sammanfattning.iterrows():
-        nr = int(rad["spelare"])
-
-        html += f"""
-        <p>
-            <a href="spelare_{nr}.html">
-                Spelare #{nr}
-            </a>
-        </p>
-        """
-
-    html += "</body></html>"
-
-    with open(utmapp / "index.html", "w", encoding="utf-8") as f:
-        f.write(html)
-def skapa_spelarsidor(utmapp, sammanfattning):
-    for _, rad in sammanfattning.iterrows():
-
-        nr = int(rad["spelare"])
-
-        html = f"""
-        <html>
-        <body>
-
-        <a href="index.html">
-        ← Tillbaka
-        </a>
-
-        <h1>Spelare #{nr}</h1>
-
-        <img src="spelare_{nr}.png" width="1400">
-
-        </body>
-        </html>
-        """
-
-        with open(
-            utmapp / f"spelare_{nr}.html",
-            "w",
-            encoding="utf-8"
-        ) as f:
-            f.write(html)
